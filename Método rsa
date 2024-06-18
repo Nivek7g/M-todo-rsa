@@ -1,0 +1,35 @@
+from Crypto.PublicKey import RSA
+from Crypto.Cipher import PKCS1_OAEP
+from Crypto.Random import get_random_bytes 
+
+
+key = RSA.generate(2048)
+private_key = key.export_key()
+public_key = key.publickey().export_key() 
+
+print("Clave privada:")
+print(private_key.decode('utf-8')) 
+
+print("\nClave pública:")
+print(public_key.decode('utf-8')) 
+
+
+message = "Este es un mensaje secreto"
+print("\nMensaje original:", message) 
+
+
+public_key = RSA.import_key(public_key)
+cipher = PKCS1_OAEP.new(public_key) 
+
+
+encrypted_message = cipher.encrypt(message.encode())
+print("\nMensaje encriptado:", encrypted_message) 
+
+
+
+private_key = RSA.import_key(private_key)
+cipher = PKCS1_OAEP.new(private_key) 
+
+
+decrypted_message = cipher.decrypt(encrypted_message)
+print("\nMensaje desencriptado:", decrypted_message.decode('utf-8'))
